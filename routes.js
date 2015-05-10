@@ -1,36 +1,33 @@
 'use strict';
 
+var Reward = require('./models/Reward');
 var bodyparser = require('body-parser');
-var fs = require('fs');
 
 module.exports = function(router) {
   router.use(bodyparser.json());
 
-  router.get('/comments', function(req, res) {
+  router.get('/rewards', function(req, res) {
 
   });
 
-  router.get('/comments', function(req, res) {
+  router.get('/rewards', function(req, res) {
 
   });
 
-  router.post('/comments', function(req, res) {
+  router.post('/rewards', function(req, res) {
 
   });
 
-  router.post('/comments', function(req, res) {
+  router.put('/rewards', function(req, res) {
 
   });
 
-  router.put('/comments', function(req, res) {
+  // Ignore?
+  router.patch('/rewards', function(req, res) {
 
   });
 
-  router.patch('/comments', function(req, res) {
-
-  });
-
-  router.delete('/comments', function(req, res) {
+  router.delete('/rewards', function(req, res) {
 
   });
 };
