@@ -7,27 +7,51 @@ module.exports = function(router) {
   router.use(bodyparser.json());
 
   router.get('/rewards', function(req, res) {
+    Reward.find({}, function(err, data) {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({msg: 'Internal Server Error'});
+      }
 
-  });
-
-  router.get('/rewards', function(req, res) {
-
+      res.json(data);
+    });
   });
 
   router.post('/rewards', function(req, res) {
+    var newReward = new Reward(req.body);
+    newReward.save(function(err, data) {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({msg: 'Internal Server Error'});
+      }
+
+      res.json(data);
+    });
+  });
+
+  router.put('/rewards/:id', function(req, res) {
+    var update = req.body;
+    delete update._id;
+
+    Reward.update({'_id': req.params.id}, update, function(err, data) {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({msg: 'Internal Service Error'});
+      }
+
+      res.json({msg: 'Update Successful'});
+    });
 
   });
 
-  router.put('/rewards', function(req, res) {
+  router.delete('/rewards/:id', function(req, res) {
+    Reward.remove({'_id': req.params.id}, function(err, data) {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({msg: 'Internal Service Error'});
+      }
 
-  });
-
-  // Ignore?
-  router.patch('/rewards', function(req, res) {
-
-  });
-
-  router.delete('/rewards', function(req, res) {
-
+      res.json({msg: 'Delete Successful'});
+    });
   });
 };

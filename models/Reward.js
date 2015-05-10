@@ -4,8 +4,8 @@ var mongoose = require('mongoose');
 
 var rewardSchema = mongoose.Schema({
   name: String,
-  status: String,
+  level: String,
   points: Number
 });
 
-module.exports = mongoose.model('Rewards', rewardSchema);
+module.exports = mongoose.model('Reward', rewardSchema);
