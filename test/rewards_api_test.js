@@ -55,7 +55,7 @@ describe('reward REST api', function() {
 
   });
 
-  describe('needs existing note', function() {
+  describe('needs existing reward profile', function() {
     beforeEach(function(done) {
       var newTest = new Reward({name: 'update', level: 'silver', points: 1000});
       newTest.save(function(err, data) {
