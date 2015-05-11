@@ -44,7 +44,7 @@ describe('reward REST api', function() {
       });
   });
 
-  it('should invalidate the input', function(done) {
+  it('should invalidate a bad input', function(done) {
     chai.request('localhost:3000')
       .post('/api/rewards')
       .send({name: 'invalid', level: 'gold', points: 4100})
