@@ -44,6 +44,17 @@ describe('reward REST api', function() {
       });
   });
 
+  it('should invalidate the input', function(done) {
+    chai.request('localhost:3000')
+      .post('/api/rewards')
+      .send({name: 'invalid', level: 'gold', points: 4100})
+      .end(function(err, res) {
+        expect(res.body.name).to.eql('ValidationError');
+        done();
+      });
+
+  });
+
   describe('needs existing note', function() {
     beforeEach(function(done) {
       var newTest = new Reward({name: 'update', level: 'silver', points: 1000});
@@ -75,8 +86,8 @@ describe('reward REST api', function() {
           expect(err).to.eql(null);
           expect(res.body.msg).to.eql('Delete Successful');
           done();
-        })
-    })
+        });
+    });
   });
 
 });

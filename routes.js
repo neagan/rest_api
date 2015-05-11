@@ -21,8 +21,7 @@ module.exports = function(router) {
     var newReward = new Reward(req.body);
     newReward.save(function(err, data) {
       if (err) {
-        console.log(err);
-        return res.status(500).json({msg: 'Internal Server Error'});
+        return res.status(500).json(err);
       }
 
       res.json(data);
