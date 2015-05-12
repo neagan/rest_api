@@ -6,7 +6,6 @@
   "scripts": {
     "test": "./node_modules/grunt-cli/bin/grunt test",
     "start": "node server.js",
-    "mongo": "mongod --dbpath=./db --smallfiles"
   },
   "repository": {
     "type": "git",
