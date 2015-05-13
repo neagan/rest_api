@@ -14,7 +14,7 @@ var rewardRoutes = express.Router();
 var userRoutes = express.Router();
 
 require('./routes/rewardRoutes')(rewardRoutes);
-require('./routes/userRoutes')(userRoutes, passport);
+require('./routes/authRoutes')(userRoutes, passport);
 
 app.use('/api', rewardRoutes);
 app.use('/api', userRoutes);

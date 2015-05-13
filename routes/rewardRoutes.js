@@ -1,6 +1,6 @@
 'use strict';
 
-var Reward = require('./models/Reward');
+var Reward = require('../models/Reward');
 var bodyparser = require('body-parser');
 
 module.exports = function(router) {

@@ -14,7 +14,7 @@ var userSchema = mongoose.Schema({
 
 userSchema.methods.generateHash = function(password) {
   bcrypt.genSalt(8, function(err, salt) {
-    bcrypt.hash(password, salt, function(err, hash) {
+    bcrypt.hash(password, salt, null, function(err, hash) {
       if (err) {
         console.log(err);
         return res.status(500).json({msg: 'Internal Server Error'});
@@ -30,10 +30,12 @@ userSchema.methods.checkPassword = function(password) {
       console.log(err);
       return res.status(500).json({msg: 'Internal Server Error'})
     }
-    return res; // ?
+    return res;
   })
 };
 
 userSchema.methods.generateToken = function(secret, callback) {
   eat.encode({id: this._id}, secret, callback);
-}
+};
+
+module.exports = mongoose.model('User', userSchema);
