@@ -2,17 +2,23 @@
 
 var mongoose = require('mongoose');
 var express = require('express');
+var passport = require('passport');
 var app = express();
 
-var router = express.Router();
+process.env.APP_SECRET = process.env.APP_SECRET || 'whatisthis';
 
 mongoose.connect(process.env.MONGOLAB_URI ||
                 'mongodb://localhost/rewards_development');
 
-require('./routes')(router);
+var rewardRoutes = express.Router();
+var userRoutes = express.Router();
 
-app.use('/api', router);
+require('./routes/rewardRoutes')(rewardRoutes);
+require('./routes/userRoutes')(userRoutes, passport);
 
-app.listen(3000, function() {
+app.use('/api', rewardRoutes);
+app.use('/api', userRoutes);
+
+app.listen(process.env.PORT || 3000, function() {
   console.log('Server running on port ' + (process.env.PORT || 3000));
 });
