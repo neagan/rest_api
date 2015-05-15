@@ -3,35 +3,37 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 var eat = require('eat');
+var events = require('events');
+var eventEmitter = new events.EventEmitter();
 
 var userSchema = mongoose.Schema({
   username: String,
   basic: {
-    email: { type: String, unique: true},
+    email: {type: String, unique: true},
     password: String
   }
 });
 
-userSchema.methods.generateHash = function(password) {
+userSchema.methods.generateHash = function(password, callback) {
   bcrypt.genSalt(8, function(err, salt) {
     bcrypt.hash(password, salt, null, function(err, hash) {
       if (err) {
         console.log(err);
-        return res.status(500).json({msg: 'Internal Server Error'});
+        return res.status(500).json({msg: 'internal Server Error'});
       }
-      return hash; // ?
+      callback(null, hash);
     });
   });
 };
 
-userSchema.methods.checkPassword = function(password) {
+userSchema.methods.checkPassword = function(password, callback) {
   bcrypt.compare(password, this.basic.password, function(err, res) {
     if (err) {
       console.log(err);
-      return res.status(500).json({msg: 'Internal Server Error'})
+      return res.status(500).json({msg: 'internal Server Error'});
     }
-    return res;
-  })
+    callback(null, res);
+  });
 };
 
 userSchema.methods.generateToken = function(secret, callback) {

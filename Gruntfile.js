@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     jshint: {
       dev: {
         src: ['Gruntfile.js', 'server.js', 'routes.js', 'models/**/*.js',
-              'test/**/*.js']
+              'test/**/*.js', 'lib/**/*.js']
       },
       options: {
         jshintrc: './config/.jshintrc'
@@ -19,7 +19,7 @@ module.exports = function(grunt) {
     jscs: {
       dev: {
         src: ['Gruntfile.js', 'server.js', 'routes.js', 'models/**/*.js',
-              'test/**/*.js']
+              'test/**/*.js', 'lib/**/*.js']
       },
       options: {
         config: './config/.jscsrc',

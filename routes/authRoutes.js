@@ -2,6 +2,8 @@
 
 var User = require('../models/User');
 var bodyparser= require('body-parser');
+var events = require('events');
+var eventEmitter = new events.EventEmitter();
 
 module.exports = function(router, passport) {
   router.use(bodyparser.json());
@@ -13,7 +15,15 @@ module.exports = function(router, passport) {
 
     var newUser = new User(newUserData);
     newUser.basic.email = req.body.email;
-    newUser.basic.password = newUser.generateHash(req.body.password);
+    newUser.generateHash(req.body.password, function(err, hash) {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({msg: 'unable to hash password'});
+      }
+
+      newUser.basic.password = hash;
+    });
+
     newUser.save(function(err, user) {
       if (err) {
         console.log(err);
@@ -23,11 +33,23 @@ module.exports = function(router, passport) {
       user.generateToken(process.env.APP_SECRET, function(err, token) {
         if (err) {
           console.log(err);
-          return res.status(500).json({msg: 'Token generation failed'});
+          return res.status(500).json({msg: 'token generation failed'});
         }
 
         res.json({token: token});
       });
     });
   });
-}
+
+  router.get('/sign_in', passport.authenticate('basic', {session: false}),
+    function(req, res) {
+      req.user.generateToken(process.env.APP_SECRET, function(err, token) {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({msg: 'token generation failed'});
+        }
+
+        res.json({token: token});
+      });
+  });
+};

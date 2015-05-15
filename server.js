@@ -7,11 +7,14 @@ var app = express();
 
 process.env.APP_SECRET = process.env.APP_SECRET || 'whatisthis';
 
+var rewardRoutes = express.Router();
+var userRoutes = express.Router();
+
 mongoose.connect(process.env.MONGOLAB_URI ||
                 'mongodb://localhost/rewards_development');
 
-var rewardRoutes = express.Router();
-var userRoutes = express.Router();
+app.use(passport.initialize());
+require('./lib/passport_strat')(passport);
 
 require('./routes/rewardRoutes')(rewardRoutes);
 require('./routes/authRoutes')(userRoutes, passport);
