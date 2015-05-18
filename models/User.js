@@ -6,11 +6,11 @@ var eat = require('eat');
 var events = require('events');
 
 var userSchema = mongoose.Schema({
-  username: String,
-  _rewardId: String,
+  username: {type: String, required: true, unique: true},
+  _rewardId: {type: String, required: true, unique: true},
   basic: {
-    email: {type: String, unique: true},
-    password: String
+    email: {type: String, required: true, unique: true},
+    password: {type: String}
   }
 });
 
@@ -19,7 +19,7 @@ userSchema.methods.generateHash = function(password, callback) {
     bcrypt.hash(password, salt, null, function(err, hash) {
       if (err) {
         console.log(err);
-        return res.status(500).json({msg: 'internal Server Error'});
+        return res.status(500).json({msg: 'internal Server Error'}); // jshint ignore:line
       }
       callback(null, hash);
     });
@@ -37,7 +37,7 @@ userSchema.methods.checkPassword = function(password, callback) {
 };
 
 userSchema.methods.generateToken = function(secret, callback) {
-  eat.encode({id: this._rewardId}, secret, callback); // Change this
+  eat.encode({id: this._rewardId}, secret, callback);
 };
 
 module.exports = mongoose.model('User', userSchema);

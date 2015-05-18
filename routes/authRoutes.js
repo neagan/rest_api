@@ -19,7 +19,7 @@ module.exports = function(router, passport) {
     newUser.generateHash(req.body.password, function(err, hash) {
       if (err) {
         console.log(err);
-        return res.status(500).json({msg: 'unable to hash password'});
+        return res.status(500).json({msg: 'unable to process password'});
       }
 
       newUser.basic.password = hash;

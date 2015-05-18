@@ -12,7 +12,7 @@ var expect = chai.expect;
 var Reward = require('../models/Reward');
 
 describe('reward REST api', function() {
-  var token = '';
+  var token;
 
   before(function(done) {
     chai.request('localhost:3000')
@@ -59,7 +59,7 @@ describe('reward REST api', function() {
   it('should invalidate a bad input', function(done) {
     chai.request('localhost:3000')
       .post('/api/rewards')
-      .send({rewardId: 'invalid', level: 'gold', points: 4100, eat: token})
+      .send({eat: token, level: 'blue', points: 4100})
       .end(function(err, res) {
         expect(res.body.name).to.eql('ValidationError');
         done();
@@ -70,10 +70,10 @@ describe('reward REST api', function() {
   it('should be able to update a reward profile', function(done) {
     chai.request('localhost:3000')
       .put('/api/rewards')
-      .send({rewardId: 'update', level: 'silver', points: 1000, eat: token})
+      .send({level: 'platinum', points: 3000, eat: token})
       .end(function(err, res) {
         expect(err).to.eql(null);
-        expect(res.body.msg).to.eql('Update Successful');
+        expect(res.body.msg).to.eql('update successful');
         done();
       });
   });
@@ -84,7 +84,7 @@ describe('reward REST api', function() {
       .send({eat: token})
       .end(function(err, res) {
         expect(err).to.eql(null);
-        expect(res.body.msg).to.eql('Delete Successful');
+        expect(res.body.msg).to.eql('delete successful');
         done();
       });
   });

@@ -36,7 +36,7 @@ module.exports = function(grunt) {
       options: {
         globals: ['should'],
         timeout: 3000,
-        ignoreLeaks: false,
+        ignoreLeaks: true,
         ui: 'bdd',
         reporter: 'tap'
       }

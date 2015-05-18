@@ -25,7 +25,17 @@ describe('user creation and authentication', function() {
       .send({username: 'test', email: 'test@example.com', password: 'tester'})
       .end(function(err, res) {
         expect(err).to.eql(null);
-        expect(res.body.token).to.exist;
+        expect(res.body.token).to.exist; // jshint ignore:line
+        done();
+      });
+  });
+
+  it('should be able to sign in', function(done) {
+    chai.request('localhost:3000')
+      .get('/api/sign_in')
+      .auth('test@example.com', 'tester')
+      .end(function(err, res) {
+        expect(res.body.token).to.exist; // jshint ignore:line
         done();
       });
   });
