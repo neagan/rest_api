@@ -8,10 +8,10 @@ module.exports = function(router) {
   router.use(bodyparser.json());
 
   router.get('/rewards', eatAuth, function(req, res) {
-    Reward.find({rewardId: req.user._id}, function(err, data) {
+    Reward.find({_rewardId: req.user._rewardId}, function(err, data) {
       if (err) {
         console.log(err);
-        return res.status(500).json({msg: 'internal Server Error'});
+        return res.status(500).json({msg: 'internal server error'});
       }
 
       res.json(data);
@@ -20,7 +20,7 @@ module.exports = function(router) {
 
   router.post('/rewards', eatAuth, function(req, res) {
     var newReward = new Reward(req.body);
-    newReward.rewardId = req.user._id;
+    newReward._rewardId = req.user._rewardId;
     newReward.save(function(err, data) {
       if (err) {
         return res.status(500).json(err);
@@ -37,10 +37,10 @@ module.exports = function(router) {
     Reward.update({'_id': req.params.id}, update, function(err, data) {
       if (err) {
         console.log(err);
-        return res.status(500).json({msg: 'internal Service Error'});
+        return res.status(500).json({msg: 'internal service error'});
       }
 
-      res.json({msg: 'update Successful'});
+      res.json({msg: 'update successful'});
     });
 
   });
@@ -49,10 +49,10 @@ module.exports = function(router) {
     Reward.remove({'_id': req.params.id}, function(err, data) {
       if (err) {
         console.log(err);
-        return res.status(500).json({msg: 'internal Service Error'});
+        return res.status(500).json({msg: 'internal service error'});
       }
 
-      res.json({msg: 'delete Successful'});
+      res.json({msg: 'delete successful'});
     });
   });
 };

@@ -4,10 +4,10 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 var eat = require('eat');
 var events = require('events');
-var eventEmitter = new events.EventEmitter();
 
 var userSchema = mongoose.Schema({
   username: String,
+  _rewardId: String,
   basic: {
     email: {type: String, unique: true},
     password: String
@@ -37,7 +37,7 @@ userSchema.methods.checkPassword = function(password, callback) {
 };
 
 userSchema.methods.generateToken = function(secret, callback) {
-  eat.encode({id: this._id}, secret, callback);
+  eat.encode({id: this._rewardId}, secret, callback); // Change this
 };
 
 module.exports = mongoose.model('User', userSchema);
