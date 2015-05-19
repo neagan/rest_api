@@ -1,27 +1,21 @@
 'use strict';
 
+process.env.MONGOLAB_URL = 'mongodb://localhost/rewards_test';
 require('../server');
 
+var mongoose = require('mongoose');
 var chai = require('chai');
 var chaihttp = require('chai-http');
 chai.use(chaihttp);
 var expect = chai.expect;
-var Sql = require('sequelize');
-var sql = new Sql('reward_dev_test', 'reward_dev', 'reward123', {
-  dialect: 'postgres'
-});
 
 var Reward = require('../models/Reward');
 
 describe('reward REST api', function() {
 
   after(function(done) {
-    Reward.drop()
-    .then(function() {
+    mongoose.connection.db.dropDatabase(function() {
       done();
-    })
-    .error(function(err) {
-      done(err);
     });
   });
 
@@ -34,7 +28,7 @@ describe('reward REST api', function() {
         expect(res.body.name).to.eql('test');
         expect(res.body.level).to.eql('gold');
         expect(res.body.points).to.eql(2000);
-        expect(res.body).to.have.property('id');
+        expect(res.body).to.have.property('_id');
         done();
       });
   });
@@ -50,25 +44,50 @@ describe('reward REST api', function() {
       });
   });
 
-  it('should be able to update a reward profile', function(done) {
+  it('should invalidate a bad input', function(done) {
     chai.request('localhost:3000')
-      .put('/api/rewards/' + 1)
-      .send({name: 'update', level: 'silver', points: 1000})
+      .post('/api/rewards')
+      .send({name: 'invalid', level: 'gold', points: 4100})
       .end(function(err, res) {
-        expect(err).to.eql(null);
-        expect(res.body.msg).to.eql('Update Successful');
+        expect(res.body.name).to.eql('ValidationError');
         done();
       });
+
   });
 
-  it('should be able to delete a reward profile', function(done) {
-    chai.request('localhost:3000')
-      .del('/api/rewards/' + 1)
-      .end(function(err, res) {
-        expect(err).to.eql(null);
-        expect(res.body.msg).to.eql('Delete Successful');
+  describe('needs existing reward profile', function() {
+    beforeEach(function(done) {
+      var newTest = new Reward({name: 'update', level: 'silver', points: 1000});
+      newTest.save(function(err, data) {
+        if (err) {
+          throw err;
+        }
+
+        this.newTest = data;
         done();
-      });
+      }.bind(this));
+    });
+
+    it('should be able to update a reward profile', function(done) {
+      chai.request('localhost:3000')
+        .put('/api/rewards/' + this.newTest._id)
+        .send({name: 'update', level: 'silver', points: 1000})
+        .end(function(err, res) {
+          expect(err).to.eql(null);
+          expect(res.body.msg).to.eql('Update Successful');
+          done();
+        });
+    });
+
+    it('should be able to delete a reward profile', function(done) {
+      chai.request('localhost:3000')
+        .del('/api/rewards/' + this.newTest._id)
+        .end(function(err, res) {
+          expect(err).to.eql(null);
+          expect(res.body.msg).to.eql('Delete Successful');
+          done();
+        });
+    });
   });
 
 });
