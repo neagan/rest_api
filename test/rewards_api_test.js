@@ -1,6 +1,6 @@
 'use strict';
 
-process.env.MONGOLAB_URL = 'mongodb://localhost/rewards_test';
+process.env.MONGOLAB_URI = 'mongodb://localhost/rewards_test';
 require('../server');
 
 var mongoose = require('mongoose');
@@ -12,6 +12,17 @@ var expect = chai.expect;
 var Reward = require('../models/Reward');
 
 describe('reward REST api', function() {
+  var token;
+
+  before(function(done) {
+    chai.request('localhost:3000')
+      .post('/api/create_user')
+      .send({username: 'test', email: 'test@example.com', password: 'tester'})
+      .end(function(err, res) {
+        token = res.body.token;
+        done();
+      });
+  });
 
   after(function(done) {
     mongoose.connection.db.dropDatabase(function() {
@@ -22,13 +33,13 @@ describe('reward REST api', function() {
   it('should be able to create a new reward profile', function(done) {
     chai.request('localhost:3000')
       .post('/api/rewards')
-      .send({name: 'test', level: 'gold', points: 2000})
+      .send({eat: token, level: 'gold', points: 2000})
       .end(function(err, res) {
         expect(err).to.eql(null);
-        expect(res.body.name).to.eql('test');
         expect(res.body.level).to.eql('gold');
         expect(res.body.points).to.eql(2000);
         expect(res.body).to.have.property('_id');
+        expect(res.body).to.have.property('_rewardId');
         done();
       });
   });
@@ -36,6 +47,7 @@ describe('reward REST api', function() {
   it('should be able to get an array of profiles', function(done) {
     chai.request('localhost:3000')
       .get('/api/rewards')
+      .send({eat: token})
       .end(function(err, res) {
         expect(err).to.eql(null);
         expect(typeof res.body).to.eql('object');
@@ -47,7 +59,7 @@ describe('reward REST api', function() {
   it('should invalidate a bad input', function(done) {
     chai.request('localhost:3000')
       .post('/api/rewards')
-      .send({name: 'invalid', level: 'gold', points: 4100})
+      .send({eat: token, level: 'blue', points: 4100})
       .end(function(err, res) {
         expect(res.body.name).to.eql('ValidationError');
         done();
@@ -55,39 +67,26 @@ describe('reward REST api', function() {
 
   });
 
-  describe('needs existing reward profile', function() {
-    beforeEach(function(done) {
-      var newTest = new Reward({name: 'update', level: 'silver', points: 1000});
-      newTest.save(function(err, data) {
-        if (err) {
-          throw err;
-        }
-
-        this.newTest = data;
+  it('should be able to update a reward profile', function(done) {
+    chai.request('localhost:3000')
+      .put('/api/rewards')
+      .send({level: 'platinum', points: 3000, eat: token})
+      .end(function(err, res) {
+        expect(err).to.eql(null);
+        expect(res.body.msg).to.eql('update successful');
         done();
-      }.bind(this));
-    });
+      });
+  });
 
-    it('should be able to update a reward profile', function(done) {
-      chai.request('localhost:3000')
-        .put('/api/rewards/' + this.newTest._id)
-        .send({name: 'update', level: 'silver', points: 1000})
-        .end(function(err, res) {
-          expect(err).to.eql(null);
-          expect(res.body.msg).to.eql('Update Successful');
-          done();
-        });
-    });
-
-    it('should be able to delete a reward profile', function(done) {
-      chai.request('localhost:3000')
-        .del('/api/rewards/' + this.newTest._id)
-        .end(function(err, res) {
-          expect(err).to.eql(null);
-          expect(res.body.msg).to.eql('Delete Successful');
-          done();
-        });
-    });
+  it('should be able to delete a reward profile', function(done) {
+    chai.request('localhost:3000')
+      .del('/api/rewards')
+      .send({eat: token})
+      .end(function(err, res) {
+        expect(err).to.eql(null);
+        expect(res.body.msg).to.eql('delete successful');
+        done();
+      });
   });
 
 });
