@@ -23,21 +23,21 @@ module.exports = function(router, passport) {
       }
 
       newUser.basic.password = hash;
-    });
 
-    newUser.save(function(err, user) {
-      if (err) {
-        console.log(err);
-        res.status(500).json({msg: 'user create failed'});
-      }
-
-      user.generateToken(process.env.APP_SECRET, function(err, token) {
+      newUser.save(function(err, user) {
         if (err) {
           console.log(err);
-          return res.status(500).json({msg: 'token generation failed'});
+          res.status(500).json({msg: 'user create failed'});
         }
 
-        res.json({token: token});
+        user.generateToken(process.env.APP_SECRET, function(err, token) {
+          if (err) {
+            console.log(err);
+            return res.status(500).json({msg: 'token generation failed'});
+          }
+
+          res.json({token: token});
+        });
       });
     });
   });
