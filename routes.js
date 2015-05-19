@@ -1,56 +1,68 @@
 'use strict';
 
-var Reward = require('./models/Reward');
 var bodyparser = require('body-parser');
+var Reward = require('./models/Reward');
+var Sql = require('sequelize');
+var sql = new Sql('reward_dev', 'reward_dev', 'reward123',  {
+  dialect: 'postgres'
+});
 
 module.exports = function(router) {
   router.use(bodyparser.json());
 
   router.get('/rewards', function(req, res) {
-    Reward.find({}, function(err, data) {
-      if (err) {
+    sql.sync()
+    .then(function() {
+      Reward.all()
+      .then(function(data) {
+        res.json(data);
+      })
+      .error(function(err) {
         console.log(err);
-        return res.status(500).json({msg: 'Internal Server Error'});
-      }
-
-      res.json(data);
+        res.status(500).json({msg: 'Internal Server Error'});
+      });
     });
   });
 
   router.post('/rewards', function(req, res) {
-    var newReward = new Reward(req.body);
-    newReward.save(function(err, data) {
-      if (err) {
-        return res.status(500).json(err);
-      }
-
-      res.json(data);
+    sql.sync()
+    .then(function() {
+      Reward.create(req.body)
+      .then(function(data) {
+        res.json(data);
+      })
+      .error(function(err) {
+        console.log(err);
+        res.status(500).json({msg: 'Internal Server Error'});
+      });
     });
   });
 
   router.put('/rewards/:id', function(req, res) {
-    var update = req.body;
-    delete update._id;
-
-    Reward.update({'_id': req.params.id}, update, function(err, data) {
-      if (err) {
+    sql.sync()
+    .then(function() {
+      Reward.update(req.body, {where: {id: req.params.id}})
+      .then(function() {
+        res.json({msg: 'Update Successful'});
+      })
+      .error(function(err) {
         console.log(err);
-        return res.status(500).json({msg: 'Internal Service Error'});
-      }
-
-      res.json({msg: 'Update Successful'});
+        res.status(500).json({msg: 'Internal Server Error'});
+      });
     });
-
   });
 
   router.delete('/rewards/:id', function(req, res) {
-    Reward.remove({'_id': req.params.id}, function(err, data) {
-      if (err) {
+    sql.sync()
+    .then(function() {
+      Reward.destroy({where: {id: req.params.id}})
+      .then(function() {
+        res.json({msg: 'Delete Successful'});
+      })
+      .error(function(err) {
         console.log(err);
-        return res.status(500).json({msg: 'Internal Service Error'});
-      }
-
-      res.json({msg: 'Delete Successful'});
+        res.status(500).json({msg: 'Internal Server Error'});
+      });
     });
   });
 };

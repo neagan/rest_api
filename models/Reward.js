@@ -1,12 +1,25 @@
 'use strict';
 
-var mongoose = require('mongoose');
-
-var rewardSchema = mongoose.Schema({
-  name: {type: String, required: true},
-  level: {type: String, required: true, enum: ['bronze', 'silver', 'gold',
-                                               'platinum', 'diamond']},
-  points: {type: Number, required: true, min: 0, max: 4000}
+var Sql = require('sequelize');
+var sql = new Sql('reward_dev', 'reward_dev', 'reward123', {
+  dialect: 'postgres'
 });
 
-module.exports = mongoose.model('Reward', rewardSchema);
+var Reward = module.exports = sql.define('Reward', {
+  name: Sql.STRING,
+  level: {
+    type: Sql.STRING,
+    validate: {
+      isIn: [['silver', 'gold', 'platinum', 'diamond']]
+    }
+  },
+  points: {
+    type: Sql.INTEGER,
+    validate: {
+      min: 0,
+      max: 4000
+    }
+  }
+});
+
+Reward.sync();
