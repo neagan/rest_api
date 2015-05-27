@@ -15,20 +15,8 @@ module.exports = function(grunt) {
               'test/**/*.js', 'lib/**/*.js']
       },
       options: {
-        jshintrc: './config/.jshintrc'
-      }
-    },
-
-    jscs: {
-      dev: {
-        src: ['Gruntfile.js', 'server.js', 'routes.js', 'models/**/*.js',
-              'test/**/*.js', 'lib/**/*.js']
-      },
-      options: {
-        config: './config/.jscsrc',
-        esnext: true,
-        verbose: true,
-        requireCurlyBraces: ['if']
+        jshintrc: './config/.jshintrc',
+        ignores: ['./test/client/bundle.js']
       }
     },
 
@@ -81,7 +69,8 @@ module.exports = function(grunt) {
 
   });
 
-  grunt.registerTask('test', ['jshint:dev', 'jscs:dev', 'simplemocha:dev']);
+  grunt.registerTask('test', ['jshint:dev', 'simplemocha:dev']);
+  grunt.registerTask('build:test', ['webpack:test']);
   grunt.registerTask('build:dev', ['webpack:client', 'copy:html']);
   grunt.registerTask('build', ['build:dev']);
 };
