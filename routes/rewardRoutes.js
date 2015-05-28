@@ -7,6 +7,17 @@ var eatAuth = require('../lib/eat_auth')(process.env.APP_SECRET);
 module.exports = function(router) {
   router.use(bodyparser.json());
 
+  router.get('/rewards', function(req, res) {
+    Reward.find({}, function(err, data) {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({msg: 'internal server error'});
+      }
+
+      res.json(data);
+    });
+  });
+
   router.get('/rewards/:id', function(req, res) {
     Reward.find({_rewardId: req.params.id}, function(err, data) {
       if (err) {
