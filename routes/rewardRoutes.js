@@ -7,8 +7,8 @@ var eatAuth = require('../lib/eat_auth')(process.env.APP_SECRET);
 module.exports = function(router) {
   router.use(bodyparser.json());
 
-  router.get('/rewards', eatAuth, function(req, res) {
-    Reward.find({_rewardId: req.user._rewardId}, function(err, data) {
+  router.get('/rewards', function(req, res) {
+    Reward.find({}, function(err, data) {
       if (err) {
         console.log(err);
         return res.status(500).json({msg: 'internal server error'});
@@ -18,9 +18,20 @@ module.exports = function(router) {
     });
   });
 
-  router.post('/rewards', eatAuth, function(req, res) {
+  router.get('/rewards/:id', function(req, res) {
+    Reward.find({_rewardId: req.params.id}, function(err, data) {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({msg: 'internal server error'});
+      }
+
+      res.json(data);
+    });
+  });
+
+  router.post('/rewards', function(req, res) {
     var newReward = new Reward(req.body);
-    newReward._rewardId = req.user._rewardId;
+    newReward._rewardId = Math.random().toString(36).substr(2, 9);
     newReward.save(function(err, data) {
       if (err) {
         return res.status(500).json(err);
@@ -30,12 +41,12 @@ module.exports = function(router) {
     });
   });
 
-  router.put('/rewards', eatAuth, function(req, res) {
+  router.put('/rewards/:id', function(req, res) {
     var update = req.body;
-    update._rewardId = req.user._rewardId;
+    update._rewardId = req.params.id;
     delete update._id;
 
-    Reward.update({'_rewardId': update._rewardId}, update, function(err, data) {
+    Reward.update({'_rewardId': req.params.id}, update, function(err, data) {
       if (err) {
         console.log(err);
         return res.status(500).json({msg: 'internal service error'});
@@ -46,8 +57,8 @@ module.exports = function(router) {
 
   });
 
-  router.delete('/rewards', eatAuth, function(req, res) {
-    Reward.remove({'_rewardId': req.user._rewardId}, function(err, data) {
+  router.delete('/rewards/:id', function(req, res) {
+    Reward.remove({'_rewardId': req.params.id}, function(err, data) {
       if (err) {
         console.log(err);
         return res.status(500).json({msg: 'internal service error'});

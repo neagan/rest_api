@@ -16,6 +16,8 @@ mongoose.connect(process.env.MONGOLAB_URI ||
 app.use(passport.initialize());
 require('./lib/passport_strat')(passport);
 
+app.use(express.static(__dirname + '/build'));
+
 require('./routes/rewardRoutes')(rewardRoutes);
 require('./routes/authRoutes')(userRoutes, passport);
 

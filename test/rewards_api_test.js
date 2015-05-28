@@ -13,6 +13,7 @@ var Reward = require('../models/Reward');
 
 describe('reward REST api', function() {
   var token;
+  var rewardId;
 
   before(function(done) {
     chai.request('localhost:3000')
@@ -40,13 +41,14 @@ describe('reward REST api', function() {
         expect(res.body.points).to.eql(2000);
         expect(res.body).to.have.property('_id');
         expect(res.body).to.have.property('_rewardId');
+        rewardId = res.body._rewardId;
         done();
       });
   });
 
-  it('should be able to get an array of profiles', function(done) {
+  it('should be able to get a specific reward profile', function(done) {
     chai.request('localhost:3000')
-      .get('/api/rewards')
+      .get('/api/rewards/' + rewardId)
       .send({eat: token})
       .end(function(err, res) {
         expect(err).to.eql(null);
@@ -69,7 +71,7 @@ describe('reward REST api', function() {
 
   it('should be able to update a reward profile', function(done) {
     chai.request('localhost:3000')
-      .put('/api/rewards')
+      .put('/api/rewards/' + rewardId)
       .send({level: 'platinum', points: 3000, eat: token})
       .end(function(err, res) {
         expect(err).to.eql(null);
@@ -80,7 +82,7 @@ describe('reward REST api', function() {
 
   it('should be able to delete a reward profile', function(done) {
     chai.request('localhost:3000')
-      .del('/api/rewards')
+      .del('/api/rewards/' + rewardId)
       .send({eat: token})
       .end(function(err, res) {
         expect(err).to.eql(null);
