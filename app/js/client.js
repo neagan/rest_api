@@ -40,6 +40,23 @@ document.getElementById('submit').onclick = function() {
     });
 };
 
+document.getElementById('update').onclick = function() {
+  var id = document.getElementById('update-id').value;
+  var level = document.getElementById('update-level').value;
+  var points = document.getElementById('update-points').value;
+
+  request
+    .put('/api/rewards/' + id)
+    .send({level: level, points: points})
+    .end(function(err, res) {
+      if (err) {
+        console.log(err);
+      }
+
+      console.log('Updated');
+    })
+}
+
 document.getElementById('delete').onclick = function() {
   var id = document.getElementById('delete-id').value;
 
