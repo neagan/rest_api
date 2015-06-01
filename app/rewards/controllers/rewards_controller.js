@@ -18,9 +18,10 @@ module.exports = function(app) {
     };
 
     $scope.createNewReward = function() {
+      $scope.rewards.push($scope.newReward);
+
       $http.post('/api/rewards', $scope.newReward)
-        .success(function(data) {
-          $scope.rewards.push(data);
+        .success(function() {
           $scope.newReward = null;
         })
         .error(function(data) {
@@ -48,7 +49,7 @@ module.exports = function(app) {
       $http.put('/api/rewards/' + reward._rewardId, reward)
         .error(function(data) {
           console.log(data);
-          $scope.errors.push({msg: 'could not update reward profile'})
+          $scope.errors.push({msg: 'could not update reward profile'});
         });
     };
 
