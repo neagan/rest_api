@@ -17,7 +17,7 @@
 
     <form name="newRewardForm" data-ng-submit="createNewReward()">
       <input type="text" required data-ng-model="newReward.level">
-      <input type="text" required data-ng-model="newReward.points">
+      <input type="number" required data-ng-model="newReward.points">
       <button type="submit" data-ng-disabled="newRewardForm.$invalid">Create New Reward</button>
     </form>
 
@@ -25,8 +25,14 @@
       <li>
         <strong><ins>Level:</ins></strong> {{reward.level}}<br>
         <strong><ins>Points:</ins></strong> {{reward.points}}<br>
-        <button>Delete</button>
-        <button>Edit</button>
+        <button data-ng-click="removeReward(reward)">Delete</button>
+        <button data-nf-if="!reward.editing" data-ng-click="copyReward(reward); reward.editing = true">Edit</button>
+        <form name="{{'editing' + reward._rewardId" data-ng-if="reward.editing" data-ng-submit="updateReward(reward)">
+          <input type="text" data-ng-model="reward.level">
+          <input type="number" data-ng-model="reward.points">
+          <button type="submit">Save Profile</button>
+          <button data-ng-click="resetReward(reward); reward.editing = false">Cancel</button>
+        </form>
       </li>
     </ul>
 
