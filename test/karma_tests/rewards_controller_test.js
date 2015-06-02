@@ -101,13 +101,10 @@ describe('rewards controller', function() {
       $httpBackend.expectPUT('/api/rewards/5').respond(200, {msg: 'update successful'});
       expect($scope.rewards[0].level).toBe('diamond');
       expect($scope.rewards[0].points).toBe(4000);
-      reward.level = 'platinum';
-      reward.points = 3999;
       $scope.updateReward(reward);
       $httpBackend.flush();
 
-      expect($scope.rewards[0].level).toBe('platinum');
-      expect($scope.rewards[0].points).toBe(3999);
+      expect($scope.errors.length).toBe(0);
     });
 
   });
