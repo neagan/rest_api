@@ -52,6 +52,18 @@ describe('rewards controller', function() {
       expect($scope.errors[0].msg).toBe('could not retrieve rewards profiles');
     });
 
+    it('should be able to create a new rewards profile', function() {
+      $scope.newReward = ({_id: 2, _rewardId: 2, level: 'silver', points: 1000});
+      $httpBackend.expectPOST('/api/rewards').respond(200, [{_id: 2, _rewardId: 2, level: 'silver', points: 1000}]);
+      $scope.createNewReward();
+      $httpBackend.flush();
+      expect($scope.rewards[0]._id).toBe(2);
+      expect($scope.rewards[0]._rewardId).toBe(2);
+      expect($scope.rewards[0].level).toBe('silver');
+      expect($scope.rewards[0].points).toBe(1000);
+      expect($scope.newReward).toBe(null);
+    });
+
   });
 
 });
