@@ -80,6 +80,20 @@ describe('rewards controller', function() {
       expect($scope.errors.length).toBe(0);
     });
 
+    it('should delete a profile even on server error', function() {
+      var reward = {_id: 4, _rewardId: 4, level: 'platinum', points: 3000};
+      $scope.rewards.push(reward);
+
+      $httpBackend.expectDELETE('/api/rewards/4').respond(500, {msg: 'internal server error'});
+      expect($scope.rewards.indexOf(reward)).not.toBe(-1);
+      $scope.removeReward(reward);
+      expect($scope.rewards.indexOf(reward)).toBe(-1);
+      $httpBackend.flush();
+
+      expect($scope.errors.length).toBe(1);
+      expect($scope.errors[0].msg).toBe('could not remove reward id: 4');
+    });
+
   });
 
 });
