@@ -2,36 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Client Side</title>
+  <title>Angular Client Side</title>
 </head>
-<body>
-  <h1>Rewards App</h1>
+<body data-ng-app="rewardsApp">
+  <main data-ng-controller="rewardsController" data-ng-init="getAll()">
+    <h1>Reward Profiles</h1>
+    <aside data-ng-if="errors.length">
+      <h2>Errors</h2>
+      <ul data-ng-repeat="error in errors">
+        <li>{{error.msg}}</li>
+      </ul>
+      <button data-ng-click="clearErrors()">Clear Errors</button>
+    </aside>
 
-  <h3>Existing Profiles</h3>
-  <ul id="rewardList"></ul>
+    <form name="newRewardForm" data-ng-submit="createNewReward()">
+      <input type="text" required data-ng-model="newReward.level">
+      <input type="number" required data-ng-model="newReward.points">
+      <button type="submit" data-ng-disabled="newRewardForm.$invalid">Create New Reward</button>
+    </form>
 
-  <h3>Create New Profile</h3>
-  Level: <input type="text" id="level">
-  <br>
-  Points: <input type="text" id="points">
-  <br>
-  <button id="submit">Save</button>
+    <ul data-ng-repeat="reward in rewards">
+      <li>
+        <strong><ins>Level:</ins></strong> {{reward.level}}<br>
+        <strong><ins>Points:</ins></strong> {{reward.points}}<br>
+        <button data-ng-click="removeReward(reward)">Delete</button>
+        <button data-nf-if="!reward.editing" data-ng-click="copyReward(reward); reward.editing = true">Edit</button>
+        <form name="{{'editing' + reward._rewardId" data-ng-if="reward.editing" data-ng-submit="updateReward(reward)">
+          <input type="text" data-ng-model="reward.level">
+          <input type="number" data-ng-model="reward.points">
+          <button type="submit">Save Profile</button>
+          <button data-ng-click="resetReward(reward); reward.editing = false">Cancel</button>
+        </form>
+      </li>
+    </ul>
 
-  <h3>Edit Profile</h3>
-  ID: <input type="text" id="update-id">
-  <br>
-  Level: <input type="text" id="update-level">
-  <br>
-  Points: <input type="text" id="update-points">
-  <br>
-  <button id="update">Update</button>
-
-  <h3>Delete Profile</h3>
-  ID: <input type="text" id="delete-id">
-  <br>
-  <button id="delete">Delete</button>
-  <br><br>
-
+  </main>
   <script src="bundle.js"></script>
 </body>
 </html>
