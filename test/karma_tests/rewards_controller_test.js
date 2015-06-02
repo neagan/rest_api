@@ -48,20 +48,36 @@ describe('rewards controller', function() {
       $httpBackend.expectGET('/api/rewards').respond(500, {msg: 'internal server error'});
       $scope.getAll();
       $httpBackend.flush();
+
       expect($scope.errors.length).toBe(1);
       expect($scope.errors[0].msg).toBe('could not retrieve rewards profiles');
     });
 
     it('should be able to create a new rewards profile', function() {
       $scope.newReward = ({_id: 2, _rewardId: 2, level: 'silver', points: 1000});
+
       $httpBackend.expectPOST('/api/rewards').respond(200, [{_id: 2, _rewardId: 2, level: 'silver', points: 1000}]);
       $scope.createNewReward();
       $httpBackend.flush();
+
       expect($scope.rewards[0]._id).toBe(2);
       expect($scope.rewards[0]._rewardId).toBe(2);
       expect($scope.rewards[0].level).toBe('silver');
       expect($scope.rewards[0].points).toBe(1000);
       expect($scope.newReward).toBe(null);
+    });
+
+    it('should be able to delete a rewards profile', function() {
+      var reward = {_id: 3, _rewardId: 3, level: 'gold', points: 2000};
+      $scope.rewards.push(reward);
+
+      $httpBackend.expectDELETE('/api/rewards/3').respond(200, {msg: 'delete successful'});
+      expect($scope.rewards.indexOf(reward)).not.toBe(-1);
+      $scope.removeReward(reward);
+      expect($scope.rewards.indexOf(reward)).toBe(-1);
+      $httpBackend.flush();
+
+      expect($scope.errors.length).toBe(0);
     });
 
   });
