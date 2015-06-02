@@ -44,6 +44,14 @@ describe('rewards controller', function() {
       expect($scope.rewards[0].points).toBe(0);
     });
 
+    it('should be able to process errors', function() {
+      $httpBackend.expectGET('/api/rewards').respond(500, {msg: 'internal server error'});
+      $scope.getAll();
+      $httpBackend.flush();
+      expect($scope.errors.length).toBe(1);
+      expect($scope.errors[0].msg).toBe('could not retrieve rewards profiles');
+    });
+
   });
 
 });
