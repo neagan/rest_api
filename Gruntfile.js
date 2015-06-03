@@ -7,6 +7,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-karma');
 
   grunt.initConfig({
     jshint: {
@@ -57,6 +58,12 @@ module.exports = function(grunt) {
       }
     },
 
+    karma: {
+      test: {
+        configFile: 'karma.conf.js'
+      }
+    },
+
     copy: {
       html: {
         cwd: 'app/',
@@ -77,8 +84,8 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('test', ['jshint:dev', 'simplemocha:dev']);
+  grunt.registerTask('karmatest', ['webpack:karma_test', 'karma:test']);
   grunt.registerTask('build:test', ['webpack:test']);
-  grunt.registerTask('build:karma', ['webpack:karma_test']);
   grunt.registerTask('build:dev', ['webpack:client', 'copy:html']);
   grunt.registerTask('build', ['build:dev']);
 };
