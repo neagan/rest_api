@@ -4,4 +4,4 @@
 .DS_Store
 **/db/
 **/build/
-test/client/bundle.js
+**/bundle.js
