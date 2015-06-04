@@ -1,33 +1,43 @@
 'use strict';
 
 module.exports = function(app) {
-  app.controller('rewardsController', ['$scope', '$http', function($scope, $http) {
+  app.controller('rewardsController', ['$scope', '$http','REST', function($scope, $http, resource) {
+    var Reward = resource('rewards');
     $scope.errors = [];
     $scope.rewards = [];
-    $scope.update = {};
+    $scope.update = {}; // Alter this to be toggle
 
     $scope.getAll = function() {
-      $http.get('/api/rewards')
-        .success(function(data) {
-          $scope.rewards = data;
-        })
-        .error(function(data) {
-          console.log(data);
-          $scope.errors.push({msg: 'could not retrieve rewards profiles'});
-        });
+      Reward.getAll(function(err, data) {
+        if (err) {
+          return $scope.errors.push({msg: 'could not retrieve rewards profiles'});
+        }
+        $scope.rewards = data;
+      });
     };
 
     $scope.createNewReward = function() {
+
       $scope.rewards.push($scope.newReward);
 
-      $http.post('/api/rewards', $scope.newReward)
-        .success(function() {
-          $scope.newReward = null;
-        })
-        .error(function(data) {
-          console.log(data);
-          $scope.errors.push({msg: 'could not create new rewards profile'});
-        });
+      Reward.create($scope.newReward, function(err, data) {
+        if (err) {
+          return $scope.errors.push({msg: 'could not create new rewards profile'});
+        }
+        $scope.rewards.splice($scope.rewards.indexOf($scope.newReward), 1, data);
+        $scope.newReward = null;
+      });
+
+      // $scope.rewards.push($scope.newReward);
+
+      // $http.post('/api/rewards', $scope.newReward)
+      //   .success(function() {
+      //     $scope.newReward = null;
+      //   })
+      //   .error(function(data) {
+      //     console.log(data);
+      //     $scope.errors.push({msg: 'could not create new rewards profile'});
+      //   });
     };
 
     $scope.clearErrors = function() {
