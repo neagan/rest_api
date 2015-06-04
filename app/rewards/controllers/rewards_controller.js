@@ -17,7 +17,6 @@ module.exports = function(app) {
     };
 
     $scope.createNewReward = function() {
-
       $scope.rewards.push($scope.newReward);
 
       Reward.create($scope.newReward, function(err, data) {
@@ -27,31 +26,16 @@ module.exports = function(app) {
         $scope.rewards.splice($scope.rewards.indexOf($scope.newReward), 1, data);
         $scope.newReward = null;
       });
-
-      // $scope.rewards.push($scope.newReward);
-
-      // $http.post('/api/rewards', $scope.newReward)
-      //   .success(function() {
-      //     $scope.newReward = null;
-      //   })
-      //   .error(function(data) {
-      //     console.log(data);
-      //     $scope.errors.push({msg: 'could not create new rewards profile'});
-      //   });
-    };
-
-    $scope.clearErrors = function() {
-      $scope.errors = [];
-      $scope.getAll();
     };
 
     $scope.removeReward = function(reward) {
       $scope.rewards.splice($scope.rewards.indexOf(reward), 1);
-      $http.delete('/api/rewards/' + reward._rewardId)
-        .error(function(data) {
-          console.log(data);
+
+      Reward.remove(reward, function(err) {
+        if (err) {
           $scope.errors.push({msg: 'could not remove reward id: ' + reward._rewardId});
-        });
+        }
+      });
     };
 
     $scope.updateReward = function(reward) {
@@ -70,6 +54,11 @@ module.exports = function(app) {
     $scope.resetReward = function(reward) {
       $scope.rewards.splice($scope.rewards.indexOf(reward), 1, angular.copy($scope.update));
       $scope.update = {};
+    };
+
+    $scope.clearErrors = function() {
+      $scope.errors = [];
+      $scope.getAll();
     };
 
   }]);
