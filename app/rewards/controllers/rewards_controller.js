@@ -57,7 +57,7 @@ module.exports = function(app) {
         $scope.update = {};
         reward.editing = false;
       }
-    }
+    };
 
     // $scope.copyReward = function(reward) {
     //   $scope.update = angular.copy(reward);
