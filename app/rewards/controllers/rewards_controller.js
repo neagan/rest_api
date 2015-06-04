@@ -40,21 +40,33 @@ module.exports = function(app) {
 
     $scope.updateReward = function(reward) {
       reward.editing = false;
-      $http.put('/api/rewards/' + reward._rewardId, reward)
-        .error(function(data) {
-          console.log(data);
+
+      Reward.save(reward, function(err, data) {
+        if (err) {
           $scope.errors.push({msg: 'could not update reward profile'});
-        });
+        }
+      });
     };
 
-    $scope.copyReward = function(reward) {
-      $scope.update = angular.copy(reward);
-    };
+    $scope.toggleCancel = function(reward) {
+      if (reward.editing) {
+        $scope.update = angular.copy(reward);
+        reward.editing = true;
+      } else {
+        $scope.rewards.splice($scope.rewards.indexOf(reward), 1, angular.copy($scope.update));
+        $scope.update = {};
+        reward.editing = false;
+      }
+    }
 
-    $scope.resetReward = function(reward) {
-      $scope.rewards.splice($scope.rewards.indexOf(reward), 1, angular.copy($scope.update));
-      $scope.update = {};
-    };
+    // $scope.copyReward = function(reward) {
+    //   $scope.update = angular.copy(reward);
+    // };
+
+    // $scope.resetReward = function(reward) {
+    //   $scope.rewards.splice($scope.rewards.indexOf(reward), 1, angular.copy($scope.update));
+    //   $scope.update = {};
+    // };
 
     $scope.clearErrors = function() {
       $scope.errors = [];
