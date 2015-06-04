@@ -14,7 +14,7 @@ module.exports = function(app) {
         .error(function(data) {
           console.log(data);
           $scope.errors.push({msg: 'could not retrieve rewards profiles'});
-        })
+        });
     };
 
     $scope.createNewReward = function() {
