@@ -50,23 +50,14 @@ module.exports = function(app) {
 
     $scope.toggleCancel = function(reward) {
       if (reward.editing) {
-        $scope.update = angular.copy(reward);
-        reward.editing = true;
-      } else {
         $scope.rewards.splice($scope.rewards.indexOf(reward), 1, angular.copy($scope.update));
         $scope.update = {};
         reward.editing = false;
+      } else {
+        $scope.update = angular.copy(reward);
+        reward.editing = true;
       }
     };
-
-    // $scope.copyReward = function(reward) {
-    //   $scope.update = angular.copy(reward);
-    // };
-
-    // $scope.resetReward = function(reward) {
-    //   $scope.rewards.splice($scope.rewards.indexOf(reward), 1, angular.copy($scope.update));
-    //   $scope.update = {};
-    // };
 
     $scope.clearErrors = function() {
       $scope.errors = [];
