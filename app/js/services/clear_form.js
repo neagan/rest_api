@@ -1,5 +1,6 @@
 'use strict';
 
+// Idea from Andrew Jacobson
 module.exports = function(app) {
   app.factory('clearForm', function() {
     return function(form) {

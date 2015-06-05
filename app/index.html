@@ -15,12 +15,6 @@
       <button data-ng-click="clearErrors()">Clear Errors</button>
     </aside>
 
-    <!-- <form name="newRewardForm" data-ng-submit="createNewReward()">
-      <input type="text" required data-ng-model="newReward.level">
-      <input type="number" required data-ng-model="newReward.points">
-      <button type="submit" data-ng-disabled="newRewardForm.$invalid">Create New Reward</button>
-    </form> -->
-
     <div data-reward-form-directive
          data-save="createNewReward(reward)"
          data-button-text="'Create New Reward'"
@@ -32,12 +26,14 @@
         <strong><ins>Points:</ins></strong> {{reward.points}}<br>
         <button data-ng-click="removeReward(reward)">Delete</button>
         <button data-nf-if="!reward.editing" data-ng-click="toggleCancel(reward)">Edit</button>
-        <form name="{{'editing' + reward._rewardId" data-ng-if="reward.editing" data-ng-submit="updateReward(reward)">
-          <input type="text" data-ng-model="reward.level">
-          <input type="number" data-ng-model="reward.points">
-          <button type="submit">Save Profile</button>
-          <button data-ng-click="toggleCancel(reward)">Cancel</button>
-        </form>
+        <div data-reward-form-directive
+             data-save="updateReward(reward)"
+             data-button-text="'Save Profile'"
+             data-label-text="Edit Profile: "
+             data-ng-if="reward.editing"
+             data-reward="reward">
+        <button data-ng-click="toggleCancel(reward)">Cancel</button>
+        </div>
       </li>
     </ul>
 
