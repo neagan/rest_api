@@ -1,11 +1,11 @@
 'use strict';
 
 module.exports = function(app) {
-  app.controller('rewardsController', ['$scope', '$http','REST', function($scope, $http, resource) {
+  app.controller('rewardsController', ['$scope','REST', 'clearForm', function($scope, resource, clearForm) {
     var Reward = resource('rewards');
     $scope.errors = [];
     $scope.rewards = [];
-    $scope.update = {}; // Alter this to be toggle
+    $scope.update = {};
 
     $scope.getAll = function() {
       Reward.getAll(function(err, data) {
@@ -16,15 +16,16 @@ module.exports = function(app) {
       });
     };
 
-    $scope.createNewReward = function() {
-      $scope.rewards.push($scope.newReward);
+    $scope.createNewReward = function(reward) {
+      var newReward = angular.copy(reward);
+      clearForm(reward);
+      $scope.rewards.push(newReward);
 
-      Reward.create($scope.newReward, function(err, data) {
+      Reward.create(newReward, function(err, data) {
         if (err) {
           return $scope.errors.push({msg: 'could not create new rewards profile'});
         }
-        $scope.rewards.splice($scope.rewards.indexOf($scope.newReward), 1, data);
-        $scope.newReward = null;
+        $scope.rewards.splice($scope.rewards.indexOf(newReward), 1, data);
       });
     };
 
@@ -48,6 +49,7 @@ module.exports = function(app) {
       });
     };
 
+    // consider turning this into a service
     $scope.toggleCancel = function(reward) {
       if (reward.editing) {
         $scope.rewards.splice($scope.rewards.indexOf(reward), 1, angular.copy($scope.update));

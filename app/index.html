@@ -15,11 +15,16 @@
       <button data-ng-click="clearErrors()">Clear Errors</button>
     </aside>
 
-    <form name="newRewardForm" data-ng-submit="createNewReward()">
+    <!-- <form name="newRewardForm" data-ng-submit="createNewReward()">
       <input type="text" required data-ng-model="newReward.level">
       <input type="number" required data-ng-model="newReward.points">
       <button type="submit" data-ng-disabled="newRewardForm.$invalid">Create New Reward</button>
-    </form>
+    </form> -->
+
+    <div data-reward-form-directive
+         data-save="createNewReward(reward)"
+         data-button-text="'Create New Reward'"
+         data-label-text="Create a New Reward Profile"></div>
 
     <ul data-ng-repeat="reward in rewards">
       <li>

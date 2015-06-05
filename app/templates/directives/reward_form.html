@@ -1,0 +1,7 @@
+<form name="rewardForm" data-ng-submit="save({reward: reward})">
+  <label>{{labelText}}</label>
+  <input type="text" required data-ng-model="reward.level">
+  <input type="number" required data-ng-model="reward.points">
+  <button type="submit" data-ng-disabled="rewardForm.$invalid">{{buttonText}}</button>
+  <div data-ng-transclude></div>
+</form>
