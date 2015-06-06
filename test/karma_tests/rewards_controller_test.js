@@ -54,17 +54,17 @@ describe('rewards controller', function() {
     });
 
     it('should be able to create a new rewards profile', function() {
-      $scope.newReward = ({_id: 2, _rewardId: 2, level: 'silver', points: 1000});
+      var reward = {_id: 2, _rewardId: 2, level: 'silver', points: 1000};
 
-      $httpBackend.expectPOST('/api/rewards').respond(200, [{_id: 2, _rewardId: 2, level: 'silver', points: 1000}]);
-      $scope.createNewReward();
+      $httpBackend.expectPOST('/api/rewards').respond(200, {_id: 2, _rewardId: 2, level: 'silver', points: 1000});
+      $scope.createNewReward(reward);
       $httpBackend.flush();
 
       expect($scope.rewards[0]._id).toBe(2);
       expect($scope.rewards[0]._rewardId).toBe(2);
       expect($scope.rewards[0].level).toBe('silver');
       expect($scope.rewards[0].points).toBe(1000);
-      expect($scope.newReward).toBe(null);
+      expect(reward.level && reward.points).toBe('');
     });
 
     it('should be able to delete a rewards profile', function() {
