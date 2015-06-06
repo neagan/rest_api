@@ -49,7 +49,7 @@ module.exports = function(router) {
     Reward.update({'_rewardId': req.params.id}, update, function(err, data) {
       if (err) {
         console.log(err);
-        return res.status(500).json({msg: 'internal service error'});
+        return res.status(500).json({msg: 'internal server error'});
       }
 
       res.json({msg: 'update successful'});
@@ -61,7 +61,7 @@ module.exports = function(router) {
     Reward.remove({'_rewardId': req.params.id}, function(err, data) {
       if (err) {
         console.log(err);
-        return res.status(500).json({msg: 'internal service error'});
+        return res.status(500).json({msg: 'internal server error'});
       }
 
       res.json({msg: 'delete successful'});

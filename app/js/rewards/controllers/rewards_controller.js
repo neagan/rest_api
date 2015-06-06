@@ -32,7 +32,7 @@ module.exports = function(app) {
     $scope.removeReward = function(reward) {
       $scope.rewards.splice($scope.rewards.indexOf(reward), 1);
 
-      Reward.remove(reward, function(err) {
+      Reward.remove(reward, reward._rewardId, function(err) {
         if (err) {
           $scope.errors.push({msg: 'could not remove reward id: ' + reward._rewardId});
         }
@@ -42,14 +42,13 @@ module.exports = function(app) {
     $scope.updateReward = function(reward) {
       reward.editing = false;
 
-      Reward.save(reward, function(err, data) {
+      Reward.save(reward, reward._rewardId, function(err, data) {
         if (err) {
           $scope.errors.push({msg: 'could not update reward profile'});
         }
       });
     };
 
-    // consider turning this into a service
     $scope.toggleCancel = function(reward) {
       if (reward.editing) {
         $scope.rewards.splice($scope.rewards.indexOf(reward), 1, angular.copy($scope.update));

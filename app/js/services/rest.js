@@ -30,14 +30,14 @@ module.exports = function(app) {
             .error(handleError(callback));
         },
 
-        remove: function(resourceData, callback) {
-          $http.delete('/api/' + resourceName + '/' + resourceData._rewardId) // needs more generic _id
+        remove: function(resourceData, id, callback) {
+          $http.delete('/api/' + resourceName + '/' + id)
             .success(handleSuccess(callback))
             .error(handleError(callback));
         },
 
-        save: function(resourceData, callback) {
-          $http.put('/api/' + resourceName + '/' + resourceData._rewardId, resourceData) // needs more generic _id
+        save: function(resourceData, id, callback) {
+          $http.put('/api/' + resourceName + '/' + id, resourceData)
             .success(handleSuccess(callback))
             .error(handleError(callback));
         }
