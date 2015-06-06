@@ -7,7 +7,7 @@ var eatAuth = require('../lib/eat_auth')(process.env.APP_SECRET);
 module.exports = function(router) {
   router.use(bodyparser.json());
 
-  router.get('/rewards', function(req, res) {
+  router.get('/rewards', eatAuth, function(req, res) {
     Reward.find({}, function(err, data) {
       if (err) {
         console.log(err);
@@ -18,7 +18,7 @@ module.exports = function(router) {
     });
   });
 
-  router.get('/rewards/:id', function(req, res) {
+  router.get('/rewards/:id', eatAuth, function(req, res) {
     Reward.find({_rewardId: req.params.id}, function(err, data) {
       if (err) {
         console.log(err);
@@ -29,7 +29,7 @@ module.exports = function(router) {
     });
   });
 
-  router.post('/rewards', function(req, res) {
+  router.post('/rewards', eatAuth, function(req, res) {
     var newReward = new Reward(req.body);
     newReward._rewardId = Math.random().toString(36).substr(2, 9);
     newReward.save(function(err, data) {
@@ -41,7 +41,7 @@ module.exports = function(router) {
     });
   });
 
-  router.put('/rewards/:id', function(req, res) {
+  router.put('/rewards/:id', eatAuth, function(req, res) {
     var update = req.body;
     update._rewardId = req.params.id;
     delete update._id;
@@ -57,7 +57,7 @@ module.exports = function(router) {
 
   });
 
-  router.delete('/rewards/:id', function(req, res) {
+  router.delete('/rewards/:id', eatAuth, function(req, res) {
     Reward.remove({'_rewardId': req.params.id}, function(err, data) {
       if (err) {
         console.log(err);
