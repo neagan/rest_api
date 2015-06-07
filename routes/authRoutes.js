@@ -35,7 +35,8 @@ module.exports = function(router, passport) {
             console.log(err);
             return res.status(500).json({msg: 'token generation failed'});
           }
-
+          console.log(token);
+          console.log('initial');
           res.json({token: token});
         });
       });

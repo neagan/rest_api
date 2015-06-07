@@ -5,39 +5,9 @@
   <title>Angular Client Side</title>
 </head>
 <body data-ng-app="rewardsApp">
-  <main data-ng-controller="rewardsController" data-ng-init="getAll()">
-    <h1>Reward Profiles</h1>
-    <aside data-ng-if="errors.length">
-      <h2>Errors</h2>
-      <ul data-ng-repeat="error in errors">
-        <li>{{error.msg}}</li>
-      </ul>
-      <button data-ng-click="clearErrors()">Clear Errors</button>
-    </aside>
+  <div data-logout-directive></div>
+  <main data-ng-view></main>
 
-    <div data-reward-form-directive
-         data-save="createNewReward(reward)"
-         data-button-text="'Create New Reward'"
-         data-label-text="Create a New Reward Profile"></div>
-
-    <ul data-ng-repeat="reward in rewards">
-      <li>
-        <strong><ins>Level:</ins></strong> {{reward.level}}<br>
-        <strong><ins>Points:</ins></strong> {{reward.points}}<br>
-        <button data-ng-click="removeReward(reward)">Delete</button>
-        <button data-nf-if="!reward.editing" data-ng-click="toggleCancel(reward)">Edit</button>
-        <div data-reward-form-directive
-             data-save="updateReward(reward)"
-             data-button-text="'Save Profile'"
-             data-label-text="Edit Profile: "
-             data-ng-if="reward.editing"
-             data-reward="reward">
-        <button data-ng-click="toggleCancel(reward)">Cancel</button>
-        </div>
-      </li>
-    </ul>
-
-  </main>
   <script src="bundle.js"></script>
 </body>
 </html>
