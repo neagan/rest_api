@@ -22,7 +22,6 @@ module.exports = function(app) {
         user.email = user.username;
         $http.post('/api/create_user', user)
           .success(function(data) {
-            console.log(data.token);
             $cookies.put('eat', data.token);
             callback(null);
           })
