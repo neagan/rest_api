@@ -32,10 +32,9 @@ module.exports = function(router) {
 
   router.put('/rewards/:id', eatAuth, function(req, res) {
     var update = req.body;
-    update._rewardId = req.params.id;
     delete update._id;
 
-    Reward.update({'_rewardId': req.params.id}, update, function(err, data) {
+    Reward.update({'_id': req.params.id}, update, function(err, data) {
       if (err) {
         console.log(err);
         return res.status(500).json({msg: 'internal server error'});
@@ -47,7 +46,7 @@ module.exports = function(router) {
   });
 
   router.delete('/rewards/:id', eatAuth, function(req, res) {
-    Reward.remove({'_rewardId': req.params.id}, function(err, data) {
+    Reward.remove({'_id': req.params.id}, function(err, data) {
       if (err) {
         console.log(err);
         return res.status(500).json({msg: 'internal server error'});

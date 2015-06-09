@@ -1,4 +1,4 @@
-'use strict';
+'use strict'; // this is broken
 
 process.env.MONGOLAB_URI = 'mongodb://localhost/auth_test';
 require('../../server');

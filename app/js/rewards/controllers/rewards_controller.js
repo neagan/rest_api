@@ -32,7 +32,7 @@ module.exports = function(app) {
     $scope.removeReward = function(reward) {
       $scope.rewards.splice($scope.rewards.indexOf(reward), 1);
 
-      Reward.remove(reward, reward._rewardId, function(err) {
+      Reward.remove(reward, reward._id, function(err) {
         if (err) {
           $scope.errors.push({msg: 'could not remove reward id: ' + reward._rewardId});
         }
@@ -42,7 +42,7 @@ module.exports = function(app) {
     $scope.updateReward = function(reward) {
       reward.editing = false;
 
-      Reward.save(reward, reward._rewardId, function(err, data) {
+      Reward.save(reward, reward._id, function(err, data) {
         if (err) {
           $scope.errors.push({msg: 'could not update reward profile'});
         }

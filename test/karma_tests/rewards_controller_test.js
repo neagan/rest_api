@@ -1,4 +1,4 @@
-'use strict';
+'use strict'; // this is broken
 
 require('../../app/js/client');
 require('angular-mocks');
