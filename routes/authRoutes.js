@@ -15,7 +15,6 @@ module.exports = function(router, passport) {
 
     var newUser = new User(newUserData);
     newUser.basic.email = req.body.email;
-    newUser._rewardId = Math.random().toString(36).substr(2, 9);
     newUser.generateHash(req.body.password, function(err, hash) {
       if (err) {
         console.log(err);

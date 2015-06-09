@@ -8,18 +8,7 @@ module.exports = function(router) {
   router.use(bodyparser.json());
 
   router.get('/rewards', eatAuth, function(req, res) {
-    Reward.find({}, function(err, data) {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({msg: 'internal server error'});
-      }
-
-      res.json(data);
-    });
-  });
-
-  router.get('/rewards/:id', eatAuth, function(req, res) {
-    Reward.find({_rewardId: req.params.id}, function(err, data) {
+    Reward.find({rewardId: req.user._id}, function(err, data) {
       if (err) {
         console.log(err);
         return res.status(500).json({msg: 'internal server error'});
@@ -31,7 +20,7 @@ module.exports = function(router) {
 
   router.post('/rewards', eatAuth, function(req, res) {
     var newReward = new Reward(req.body);
-    newReward._rewardId = Math.random().toString(36).substr(2, 9);
+    newReward.rewardId = req.user._id;
     newReward.save(function(err, data) {
       if (err) {
         return res.status(500).json(err);

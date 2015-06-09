@@ -7,7 +7,6 @@ var events = require('events');
 
 var userSchema = mongoose.Schema({
   username: {type: String, required: true, unique: true},
-  _rewardId: {type: String, required: true, unique: true},
   basic: {
     email: {type: String, required: true, unique: true},
     password: {type: String}
