@@ -1,7 +1,7 @@
-'use strict';
+'use strict'; // this is broken
 
 process.env.MONGOLAB_URI = 'mongodb://localhost/auth_test';
-require('../server');
+require('../../server');
 
 var mongoose = require('mongoose');
 var chai = require('chai');
@@ -9,7 +9,7 @@ var chaihttp = require('chai-http');
 chai.use(chaihttp);
 var expect = chai.expect;
 
-var User = require('../models/User');
+var User = require('../../models/User');
 
 describe('user creation and authentication', function() {
 
@@ -25,7 +25,7 @@ describe('user creation and authentication', function() {
       .send({username: 'test', email: 'test@example.com', password: 'tester'})
       .end(function(err, res) {
         expect(err).to.eql(null);
-        expect(res.body.token).to.exist; // jshint ignore:line
+        expect(res.body).to.have.property('token');
         done();
       });
   });
@@ -35,7 +35,7 @@ describe('user creation and authentication', function() {
       .get('/api/sign_in')
       .auth('test@example.com', 'tester')
       .end(function(err, res) {
-        expect(res.body.token).to.exist; // jshint ignore:line
+        expect(res.body).to.have.property('token');
         done();
       });
   });

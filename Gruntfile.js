@@ -8,6 +8,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.initConfig({
     jshint: {
@@ -57,7 +58,7 @@ module.exports = function(grunt) {
 
     simplemocha: {
       dev: {
-        src: ['test/**/*.js']
+        src: ['test/server/*.js']
       },
       options: {
         globals: ['should'],
@@ -73,13 +74,6 @@ module.exports = function(grunt) {
         entry: __dirname + '/app/js/client.js',
         output: {
           path: 'build/',
-          file: 'bundle.js'
-        }
-      },
-      test: {
-        entry: __dirname + '/test/client/test.js',
-        output: {
-          path: 'test/client/',
           file: 'bundle.js'
         }
       },
@@ -113,12 +107,19 @@ module.exports = function(grunt) {
       dev: {
         src: 'build/'
       }
-    }
+    },
 
+    watch: {
+      scripts: {
+        files: ['app/**/*.js'],
+        tasks: ['build']
+      }
+    }
   });
 
-
   grunt.registerTask('karmatest', ['webpack:karma_test', 'karma:test']);
+  grunt.registerTask('mochatest', ['simplemocha:dev']);
+  grunt.registerTask('test:all', ['karmatest', 'mochatest']);
   grunt.registerTask('build:test', ['webpack:test']);
   grunt.registerTask('build:dev', ['webpack:client', 'copy:html']);
   grunt.registerTask('build', ['build:dev']);

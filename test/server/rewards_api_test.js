@@ -1,7 +1,7 @@
-'use strict';
+'use strict'; // this is broken
 
 process.env.MONGOLAB_URI = 'mongodb://localhost/rewards_test';
-require('../server');
+require('../../server');
 
 var mongoose = require('mongoose');
 var chai = require('chai');
@@ -9,7 +9,7 @@ var chaihttp = require('chai-http');
 chai.use(chaihttp);
 var expect = chai.expect;
 
-var Reward = require('../models/Reward');
+var Reward = require('../../models/Reward');
 
 describe('reward REST api', function() {
   var token;
