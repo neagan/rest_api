@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/neagan/rest_api.svg?branch=master)](https://travis-ci.org/neagan/rest_api)
 Single Resource REST API
 ========================
 Contains GET, POST, PUT, and DELETE capabilities
